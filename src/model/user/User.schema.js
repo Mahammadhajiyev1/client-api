@@ -8,6 +8,18 @@ const UserSchema = new Schema({
   phone: { type: Number, maxlength: 11 },
   email: { type: String, maxlength: 50, required: true },
   password: { type: String, maxlength: 100, minlength: 8, required: true },
+  refreshJWT: {
+    token: {
+      type: String,
+      maxlength: 500,
+      default: "",
+    },
+    addedAt: {
+      type: Date,
+      required: true,
+      default: Date.now(),
+    },
+  },
 });
 
 module.exports = {
