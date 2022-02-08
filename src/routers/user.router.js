@@ -29,7 +29,6 @@ router.post("/", async (req, res) => {
     };
 
     const result = await insertUser(newUserObject);
-    console.log(result);
 
     res.json({ message: "New user has been created", result });
   } catch (error) {
@@ -49,7 +48,6 @@ router.post("/login", async (req, res) => {
   // Get user email from db
 
   const user = await getUserByEmail(email);
-  console.log(user);
 
   // Hash password and compare with db one
   const passwordFromDB = user && user._id ? user.password : null;
@@ -61,11 +59,9 @@ router.post("/login", async (req, res) => {
   if (!result) {
     return res.json({ status: "error", message: "Invalid email or password!" });
   }
-  const accessJWT = await createAccessJWT(user.email);
+  const accessJWT = await createAccessJWT(user.email, `${user._id}`);
 
   const refreshJWT = await createRefreshJWT(user.email);
-
-  console.log(result);
 
   res.json({ status: "success", message: "Login Succesfully!", accessJWT });
 });

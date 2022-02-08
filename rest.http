@@ -7,7 +7,7 @@ Content-Type: application/json
     "company": "Mahac MMC",
     "address": "S.Vezirov St.",
     "phone": "+994502411115",
-    "email":"mahammadhajiyev3@gmail.com",
+    "email":"mahammadhajiyev4@gmail.com",
     "password":"secret123"
 } 
 
@@ -16,7 +16,7 @@ POST http://localhost:3001/v1/user/login
 Content-Type: application/json
 
 {
-    "email":"mahammadhajiyev3@gmail.com",
+    "email":"mahammadhajiyev4@gmail.com",
     "password":"secret123"
 } 
 
