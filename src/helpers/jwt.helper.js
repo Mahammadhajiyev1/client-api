@@ -17,7 +17,7 @@ const createAccessJWT = async (email, _id) => {
 const createRefreshJWT = async (email, _id) => {
   try {
     const refreshJWT = await jwt.sign(
-      { payload },
+      { email },
       process.env.JWT_REFRESH_SECRET,
       {
         expiresIn: "30d",
@@ -31,7 +31,16 @@ const createRefreshJWT = async (email, _id) => {
   }
 };
 
+const verifyAccessJWT = (userJWT) => {
+  try {
+    return Promise.resolve(jwt.verify(userJWT, process.env.JWT_ACCESS_SECRET));
+  } catch (error) {
+    return Promise.resolve(error);
+  }
+};
+
 module.exports = {
   createAccessJWT,
   createRefreshJWT,
+  verifyAccessJWT,
 };

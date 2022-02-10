@@ -1,13 +1,28 @@
-const { json } = require("body-parser");
 const express = require("express");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt.helper");
 const { createAccessJWT, createRefreshJWT } = require("../helpers/jwt.helper");
+const {
+  userAuthorisation,
+} = require("../middlewares/authorisation.middleware");
 const router = express.Router();
-const { insertUser, getUserByEmail } = require("../model/user/User.model");
+const {
+  insertUser,
+  getUserByEmail,
+  getUserById,
+} = require("../model/user/User.model");
 
 router.all("/", (req, res, next) => {
   // res.json({ message: "return from user router" });
   next();
+});
+// Get user profile router
+router.get("/", userAuthorisation, async (req, res) => {
+  // this data going to be geted from database
+  const _id = req.userId;
+  // 3. extract user id
+  const userProfile = await getUserById(_id);
+  // 4. get user profile based on user id
+  res.json({ user: userProfile });
 });
 
 // Create user route
@@ -63,7 +78,12 @@ router.post("/login", async (req, res) => {
 
   const refreshJWT = await createRefreshJWT(user.email, `${user._id}`);
 
-  res.json({ status: "success", message: "Login Succesfully!", accessJWT });
+  res.json({
+    status: "success",
+    message: "Login Succesfully!",
+    accessJWT,
+    refreshJWT,
+  });
 });
 
 module.exports = router;

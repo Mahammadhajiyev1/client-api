@@ -20,3 +20,9 @@ Content-Type: application/json
     "password":"secret123"
 } 
 
+
+### Get user profile  endpoint
+GET http://localhost:3001/v1/user
+Authorisation: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haGFtbWFkaGFqaXlldjRAZ21haWwuY29tIiwiaWF0IjoxNjQ0NDk3OTEwLCJleHAiOjE2NDQ0OTg4MTB9._OUGQedeuzsFqiyzNrptzSjOEjnI5TqfnwzKxTa9Q4c
+
+
