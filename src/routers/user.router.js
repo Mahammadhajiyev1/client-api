@@ -2,8 +2,8 @@ const express = require("express");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt.helper");
 const { createAccessJWT, createRefreshJWT } = require("../helpers/jwt.helper");
 const {
-  userAuthorisation,
-} = require("../middlewares/authorisation.middleware");
+  userAuthorization,
+} = require("../middlewares/authorization.middleware");
 const router = express.Router();
 const {
   insertUser,
@@ -16,7 +16,7 @@ router.all("/", (req, res, next) => {
   next();
 });
 // Get user profile router
-router.get("/", userAuthorisation, async (req, res) => {
+router.get("/", userAuthorization, async (req, res) => {
   // this data going to be geted from database
   const _id = req.userId;
   // 3. extract user id

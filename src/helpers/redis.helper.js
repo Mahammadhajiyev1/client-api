@@ -20,7 +20,16 @@ const getJWT = async (key) => {
   return await client.get(key);
 };
 
+const deleteJWT = async (key) => {
+  client.on("error", (err) => console.log("Redis Client Error", err));
+
+  await client.connect();
+
+  return await client.del(key);
+};
+
 module.exports = {
   setJWT,
   getJWT,
+  deleteJWT,
 };

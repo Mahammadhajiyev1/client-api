@@ -1,16 +1,16 @@
 const { verifyAccessJWT } = require("../helpers/jwt.helper");
-const { getJWT } = require("../helpers/redis.helper");
+const { getJWT, deleteJWT } = require("../helpers/redis.helper");
 
-const userAuthorisation = async (req, res, next) => {
-  const { authorisation } = req.headers;
+const userAuthorization = async (req, res, next) => {
+  const { authorization } = req.headers;
 
   // 1. verify if jwt is valid
-  const decoded = await verifyAccessJWT(authorisation);
+  const decoded = await verifyAccessJWT(authorization);
 
   if (decoded.email) {
     // 2. check if jwt exist in redis
 
-    const userId = await getJWT(authorisation);
+    const userId = await getJWT(authorization);
 
     if (!userId) {
       return res.status(403).json({ message: "Forbiden" });
@@ -19,10 +19,11 @@ const userAuthorisation = async (req, res, next) => {
 
     return next();
   }
+  deleteJWT(authorization);
 
   res.status(403).json({ message: "Forbiden" });
 };
 
 module.exports = {
-  userAuthorisation,
+  userAuthorization,
 };
