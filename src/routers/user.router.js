@@ -1,5 +1,6 @@
 const express = require("express");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt.helper");
+const { emailProcessor } = require("../helpers/email.helper");
 const { createAccessJWT, createRefreshJWT } = require("../helpers/jwt.helper");
 const {
   userAuthorization,
@@ -92,7 +93,18 @@ router.post("/reset-password", async (req, res) => {
   const user = await getUserByEmail(email);
   if (user && user._id) {
     const setPin = await setPasswordResetPin(email);
-    return res.json(setPin);
+    const result = await emailProcessor(email, setPin.pin);
+    if (result && result.messageId) {
+      return res.json({
+        status: "success",
+        message:
+          "If your email exist in database you will get 6 digit pin shortly by email",
+      });
+    }
+    return res.json({
+      status: "error",
+      message: "Something went wrong please try it later or email us",
+    });
   }
   res.json({
     status: "error",
