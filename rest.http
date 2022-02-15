@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
     "email":"mahammadhajiyev4@gmail.com",
-    "password":"password"
+    "password":"password2"
 } 
 
 
@@ -55,3 +55,10 @@ Content-Type: application/json
    "pin":"228521",
    "newPassword":"password2"
 }
+
+
+
+### User logout endpoint
+DELETE  http://localhost:3001/v1/user/logout
+Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haGFtbWFkaGFqaXlldjRAZ21haWwuY29tIiwiaWF0IjoxNjQ0OTU5NDU2LCJleHAiOjE2NDQ5NjAzNTZ9.iPXZtVPQEnZJIon09iU0zVDN-Wims_aw1a9ISjjY8V0
+

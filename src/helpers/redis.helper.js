@@ -1,29 +1,55 @@
 const redis = require("redis");
 const client = redis.createClient(process.env.REDIS_URL);
+let redisIsReady = false;
 
 const setJWT = async (key, value) => {
   // const client = redis.createClient(process.env.REDIS_URL);
+  client.on("error", (err) => {
+    redisIsReady = false;
+    console.log("Redis Client Error", err);
+  });
+  client.on("ready", function () {
+    redisIsReady = true;
+    console.log("redis is running");
+  });
+  if (!redisIsReady) {
+    await client.connect();
+  }
 
-  client.on("error", (err) => console.log("Redis Client Error", err));
-
-  await client.connect();
-
-  await client.set(key, value);
+  return await client.set(key, value);
 };
 const getJWT = async (key) => {
-  // const client = redis.createClient(process.env.REDIS_URL);
+  redisIsReady = true;
+  client.on("error", (err) => {
+    redisIsReady = false;
+    console.log("Redis Client Error", err);
+  });
+  client.on("ready", function () {
+    redisIsReady = true;
+    console.log("redis is running");
+  });
 
-  client.on("error", (err) => console.log("Redis Client Error", err));
-
-  await client.connect();
+  if (!redisIsReady) {
+    await client.connect();
+  }
 
   return await client.get(key);
 };
 
 const deleteJWT = async (key) => {
-  client.on("error", (err) => console.log("Redis Client Error", err));
+  redisIsReady = true;
+  client.on("error", (err) => {
+    redisIsReady = false;
+    console.log("Redis Client Error", err);
+  });
+  client.on("ready", function () {
+    redisIsReady = true;
+    console.log("redis is running");
+  });
 
-  await client.connect();
+  if (!redisIsReady) {
+    await client.connect();
+  }
 
   return await client.del(key);
 };

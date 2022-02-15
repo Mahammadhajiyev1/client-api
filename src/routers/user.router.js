@@ -2,6 +2,7 @@ const express = require("express");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt.helper");
 const { emailProcessor } = require("../helpers/email.helper");
 const { createAccessJWT, createRefreshJWT } = require("../helpers/jwt.helper");
+const { deleteJWT } = require("../helpers/redis.helper");
 const {
   userAuthorization,
 } = require("../middlewares/authorization.middleware");
@@ -20,6 +21,7 @@ const {
   getUserByEmail,
   getUserById,
   updatePassword,
+  storeUserRefreshJWT,
 } = require("../model/user/User.model");
 
 router.all("/", (req, res, next) => {
@@ -161,5 +163,21 @@ router.patch(
     });
   }
 );
+
+// User logout and invalidate accessJWT
+
+router.delete("/logout", userAuthorization, async (req, res) => {
+  const { authorization } = req.headers;
+
+  const _id = req.userId;
+
+  await deleteJWT(authorization);
+  const result = await storeUserRefreshJWT(_id, "");
+  if (result._id) {
+    return res.json({ status: "success", message: "Logged out successfully" });
+  }
+
+  res.json({ status: "error", message: "Unable to log out " });
+});
 
 module.exports = router;
