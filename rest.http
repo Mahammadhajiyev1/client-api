@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
     "email":"mahammadhajiyev4@gmail.com",
-    "password":"secret123"
+    "password":"password"
 } 
 
 
@@ -49,8 +49,9 @@ Content-Type: application/json
 
 PATCH http://localhost:3001/v1/user/reset-password
 Content-Type: application/json
+
 {
-   " email":"mahammadhajiyev4@gmail.com",
-    "pin":"891401",
-   " newPassword":"password"
+   "email":"mahammadhajiyev4@gmail.com",
+   "pin":"897946",
+   "newPassword":"password2"
 }

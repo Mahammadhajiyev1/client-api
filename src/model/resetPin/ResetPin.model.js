@@ -18,55 +18,42 @@ const setPasswordResetPin = async (email) => {
       .catch((error) => reject(error));
   });
 };
-
-const getUserByEmail = (email) => {
+const getPinByEmailPin = (email, pin) => {
   return new Promise((resolve, reject) => {
-    if (!email) return false;
     try {
-      UserSchema.findOne({ email }, (error, data) => {
+      ResetPinSchema.findOne({ email, pin }, (error, data) => {
         if (error) {
-          reject(error);
+          console.log(error);
+          resolve(false);
         }
         resolve(data);
       });
     } catch (error) {
       reject(error);
+      console.log(error);
     }
   });
 };
 
-const storeUserRefreshJWT = (_id, token) => {
+const deletePinByEmailPin = (email, pin) => {
   return new Promise((resolve, reject) => {
     try {
-      UserSchema.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { "refreshJWT.token": token, "refreshJWT.addedAt": Date.now() },
-        },
-        { new: true }
-      )
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-const getUserById = (_id) => {
-  return new Promise((resolve, reject) => {
-    if (!_id) return false;
-    try {
-      UserSchema.findOne({ _id }, (error, data) => {
+      ResetPinSchema.findOneAndDelete({ email, pin }, (error, data) => {
         if (error) {
-          reject(error);
+          console.log(error);
+          resolve(false);
         }
         resolve(data);
       });
     } catch (error) {
       reject(error);
+      console.log(error);
     }
   });
 };
+
 module.exports = {
   setPasswordResetPin,
+  getPinByEmailPin,
+  deletePinByEmailPin,
 };
