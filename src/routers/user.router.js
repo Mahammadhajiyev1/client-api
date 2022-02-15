@@ -4,6 +4,7 @@ const { createAccessJWT, createRefreshJWT } = require("../helpers/jwt.helper");
 const {
   userAuthorization,
 } = require("../middlewares/authorization.middleware");
+const { setPasswordResetPin } = require("../model/resetPin/ResetPin.model");
 const router = express.Router();
 const {
   insertUser,
@@ -83,6 +84,20 @@ router.post("/login", async (req, res) => {
     message: "Login Succesfully!",
     accessJWT,
     refreshJWT,
+  });
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { email } = req.body;
+  const user = await getUserByEmail(email);
+  if (user && user._id) {
+    const setPin = await setPasswordResetPin(email);
+    return res.json(setPin);
+  }
+  res.json({
+    status: "error",
+    message:
+      "If your email exist in database you will get 6 digit pin shortly by email",
   });
 });
 

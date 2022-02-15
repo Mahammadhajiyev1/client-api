@@ -32,3 +32,25 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haGFtbWFkaGFq
 
 GET http://localhost:3001/v1/tokens
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haGFtbWFkaGFqaXlldjRAZ21haWwuY29tIiwiaWF0IjoxNjQ0NjcwMDk4LCJleHAiOjE2NDcyNjIwOTh9.c7cfAqXOjD2-OgpRuBcGAoKZAFRalCSpNR84TJWrRD4
+
+
+
+### Pasword reset  request endpoint
+
+POST  http://localhost:3001/v1/user/reset-password
+Content-Type: application/json
+
+{
+   "email": "mahammadhajiyev4@gmail.com"
+}
+
+
+### Update new password endpoint
+
+PATCH http://localhost:3001/v1/user/reset-password
+Content-Type: application/json
+{
+   " email":"mahammadhajiyev4@gmail.com",
+    "pin":"891401",
+   " newPassword":"password"
+}
