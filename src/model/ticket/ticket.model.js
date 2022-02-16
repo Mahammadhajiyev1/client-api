@@ -28,8 +28,24 @@ const getTickets = (clientId) => {
     }
   });
 };
+const getTicketById = (_id, clientId) => {
+  return new Promise((resolve, reject) => {
+    if (!clientId && !_id) return false;
+    try {
+      TicketSchema.find({ _id, clientId }, (error, data) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(data);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 module.exports = {
   insertTicket,
   getTickets,
+  getTicketById,
 };

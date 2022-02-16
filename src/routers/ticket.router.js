@@ -1,5 +1,9 @@
 const express = require("express");
-const { insertTicket, getTickets } = require("../model/ticket/ticket.model");
+const {
+  insertTicket,
+  getTickets,
+  getTicketById,
+} = require("../model/ticket/ticket.model");
 const router = express.Router();
 const {
   userAuthorization,
@@ -51,9 +55,29 @@ router.post("/", userAuthorization, async (req, res) => {
 /// Get all tickets for spesific user
 router.get("/", userAuthorization, async (req, res) => {
   try {
-    const userId = req.userId;
+    const clientId = req.userId;
 
-    const result = await getTickets(userId);
+    const result = await getTickets(clientId);
+
+    return res.json({
+      status: "succes",
+      result,
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+/// Get single ticket for spesific user
+router.get("/:_id", userAuthorization, async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const clientId = req.userId;
+
+    const result = await getTicketById(_id, clientId);
 
     return res.json({
       status: "succes",
