@@ -13,6 +13,23 @@ const insertTicket = (ticketObeject) => {
   });
 };
 
+const getTickets = (clientId) => {
+  return new Promise((resolve, reject) => {
+    if (!clientId) return false;
+    try {
+      TicketSchema.find({ clientId }, (error, data) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(data);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   insertTicket,
+  getTickets,
 };

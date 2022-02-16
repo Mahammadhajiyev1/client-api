@@ -19,7 +19,6 @@ const setJWT = async (key, value) => {
   return await client.set(key, value);
 };
 const getJWT = async (key) => {
-  redisIsReady = true;
   client.on("error", (err) => {
     redisIsReady = false;
     console.log("Redis Client Error", err);
@@ -37,7 +36,6 @@ const getJWT = async (key) => {
 };
 
 const deleteJWT = async (key) => {
-  redisIsReady = true;
   client.on("error", (err) => {
     redisIsReady = false;
     console.log("Redis Client Error", err);
