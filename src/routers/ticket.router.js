@@ -5,6 +5,7 @@ const {
   getTicketById,
   updateClientReply,
   updateStatusClose,
+  deleteTicket,
 } = require("../model/ticket/ticket.model");
 const router = express.Router();
 const {
@@ -137,6 +138,33 @@ router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
     res.json({
       status: "error",
       message: "Your ticket can not be closed, please try again later",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+// Delete ticket
+
+router.delete("/:_id", userAuthorization, async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const clientId = req.userId;
+
+    const result = await deleteTicket({ _id, clientId });
+
+    if (result._id) {
+      return res.json({
+        status: "succes",
+        message: "Ticket has been deleted",
+      });
+    }
+    res.json({
+      status: "error",
+      message: "Your ticket can not be deleted, please try again later",
     });
   } catch (error) {
     res.json({
