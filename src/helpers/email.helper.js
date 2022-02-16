@@ -37,11 +37,11 @@ const emailProcessor = ({ email, pin, type }) => {
         to: email, // list of receivers
         subject: "Password reset pin From MahacMMC", // Subject line
         text:
-          "Your password reset pin for" +
+          "Your password reset pin for " +
           email +
-          "is" +
+          " is " +
           pin +
-          ", This pin is going to expire in 1 day", // plain text body
+          " , This pin is going to expire in 1 day", // plain text body
         html: `<b>Hello world?</b>
     This is your pin for reset passsword for user ${email}, This will expire in 1 day
     <b>${pin}</b>`, // html body
