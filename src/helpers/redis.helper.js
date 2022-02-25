@@ -10,13 +10,14 @@ const setJWT = async (key, value) => {
   });
   client.on("ready", function () {
     redisIsReady = true;
-    console.log("redis is running");
+    console.log("redis is running setJWT");
   });
   if (!redisIsReady) {
     await client.connect();
   }
+  const result = await client.set(key, value);
 
-  return await client.set(key, value);
+  return result;
 };
 const getJWT = async (key) => {
   client.on("error", (err) => {
@@ -25,14 +26,16 @@ const getJWT = async (key) => {
   });
   client.on("ready", function () {
     redisIsReady = true;
-    console.log("redis is running");
+    console.log("redis is running getJWT");
   });
 
   if (!redisIsReady) {
     await client.connect();
   }
 
-  return await client.get(key);
+  const result = await client.get(key);
+  console.log(result);
+  return result;
 };
 
 const deleteJWT = async (key) => {
@@ -42,14 +45,15 @@ const deleteJWT = async (key) => {
   });
   client.on("ready", function () {
     redisIsReady = true;
-    console.log("redis is running");
+    console.log("redis is running deleteJWT");
   });
 
   if (!redisIsReady) {
     await client.connect();
   }
 
-  return await client.del(key);
+  const result = await client.del(key);
+  return result;
 };
 
 module.exports = {

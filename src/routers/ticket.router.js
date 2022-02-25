@@ -113,7 +113,12 @@ router.put(
       const { _id } = req.params;
       const clientId = req.userId;
 
-      const result = await updateClientReply({ _id, message, sender });
+      const result = await updateClientReply({
+        _id,
+        clientId,
+        message,
+        sender,
+      });
 
       if (result._id) {
         return res.json({
