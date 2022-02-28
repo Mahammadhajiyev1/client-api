@@ -171,15 +171,9 @@ router.post(
         pin: setPin.pin,
         type: "request-new-password",
       });
-
-      return res.json({
-        status: "success",
-        message:
-          "If your email exist in database you will get 6 digit pin shortly by email",
-      });
     }
     res.json({
-      status: "error",
+      status: "success",
       message:
         "If your email exist in database you will get 6 digit pin shortly by email",
     });
@@ -192,7 +186,7 @@ router.patch(
   async (req, res) => {
     const { email, pin, newPassword } = req.body;
     const getPin = await getPinByEmailPin(email, pin);
-    if (getPin._id) {
+    if (getPin?._id) {
       const dataBaseDate = getPin.addedAt;
       const expiresIn = 1;
       let expireDate = dataBaseDate.setDate(dataBaseDate.getDate() + expiresIn);
