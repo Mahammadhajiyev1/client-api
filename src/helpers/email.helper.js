@@ -28,7 +28,7 @@ const send = (info) => {
   });
 };
 
-const emailProcessor = ({ email, pin, type }) => {
+const emailProcessor = ({ email, pin, type, verificationLink = "" }) => {
   let info = "";
   switch (type) {
     case "request-new-password":
@@ -43,7 +43,7 @@ const emailProcessor = ({ email, pin, type }) => {
           pin +
           " , This pin is going to expire in 1 day", // plain text body
         html: `<b>Hello world?</b>
-    This is your pin for reset passsword for user ${email}, This will expire in 1 day
+    This is your pin for reset password for user ${email}, This will expire in 1 day
     <b>${pin}</b>`, // html body
       };
       send(info);
@@ -57,6 +57,18 @@ const emailProcessor = ({ email, pin, type }) => {
         text: "Your password has been updated", // plain text body
         html: `<b>Hello</b>
                 <p>Your password has been updated</p>`, // html body
+      };
+      send(info);
+      break;
+    case "new-user-confirmation":
+      info = {
+        from: " 'Mahac MMC' <percival.conroy77@ethereal.email>", // sender address
+        to: email, // list of receivers
+        subject: "This is confirmation link", // Subject line
+        text: "Please verify your e-mail by clicking link below.", // plain text body
+        html: `<b>Hello</b>
+                <p>Please verify your e-mail by clicking link below.</p>
+                <a href='${verificationLink}'>${verificationLink}</a>`, // html body
       };
       send(info);
       break;

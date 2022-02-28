@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -19,6 +20,11 @@ const UserSchema = new Schema({
       required: true,
       default: Date.now(),
     },
+  },
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 });
 

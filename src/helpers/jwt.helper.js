@@ -43,6 +43,7 @@ const verifyRefreshJWT = (userJWT) => {
   try {
     return Promise.resolve(jwt.verify(userJWT, process.env.JWT_REFRESH_SECRET));
   } catch (error) {
+    console.log(error);
     return Promise.resolve(error);
   }
 };

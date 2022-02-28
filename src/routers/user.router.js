@@ -1,3 +1,5 @@
+const { request } = require("express");
+const e = require("express");
 const express = require("express");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt.helper");
 const { emailProcessor } = require("../helpers/email.helper");
@@ -9,6 +11,7 @@ const {
 const {
   resetPasswordRequestValidation,
   updatePasswordRequestValidation,
+  newUserValidation,
 } = require("../middlewares/formValidation.middleware");
 const {
   setPasswordResetPin,
@@ -22,7 +25,10 @@ const {
   getUserById,
   updatePassword,
   storeUserRefreshJWT,
+  verifyUser,
 } = require("../model/user/User.model");
+
+const verificationUrl = "http://localhost:3000/verification/";
 
 router.all("/", (req, res, next) => {
   // res.json({ message: "return from user router" });
@@ -45,9 +51,32 @@ router.get("/", userAuthorization, async (req, res) => {
   });
 });
 
+// verify user after sign up
+router.patch("/verify", async (req, res) => {
+  try {
+    const { _id, email } = req.body;
+    const result = await verifyUser(_id, email);
+    if (result && result._id) {
+      return res.json({
+        status: "success",
+        message: "Your account has been approved, You can sign in now",
+      });
+    }
+    return res.json({
+      status: "error",
+      message: "Invalid request",
+    });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      message: "Invalid request",
+    });
+  }
+});
+
 // Create user route
 
-router.post("/", async (req, res) => {
+router.post("/", newUserValidation, async (req, res) => {
   const { name, company, address, phone, email, password } = req.body;
 
   try {
@@ -65,10 +94,25 @@ router.post("/", async (req, res) => {
 
     const result = await insertUser(newUserObject);
 
-    res.json({ message: "New user has been created", result });
+    await emailProcessor({
+      email,
+      type: "new-user-confirmation",
+      verificationLink: verificationUrl + result._id + "/" + email,
+    });
+
+    res.json({
+      status: "success",
+      message: "New user has been created",
+      result,
+    });
   } catch (error) {
     // console.log(error);
-    res.json({ status: "error", message: error.message });
+    let message =
+      "Unable to create a new user at the moment. Please try again or contact with adminstration ";
+    if (error.message.includes("duplicate key error collection")) {
+      message = "This e-mail already has an account";
+    }
+    res.json({ status: "error", message });
   }
 });
 
@@ -83,6 +127,14 @@ router.post("/login", async (req, res) => {
   // Get user email from db
 
   const user = await getUserByEmail(email);
+
+  if (!user.isVerified) {
+    return res.json({
+      status: "error",
+      message:
+        "Your e-mail is not verified. Please check your e-mail to verify your account",
+    });
+  }
 
   // Hash password and compare with db one
   const passwordFromDB = user && user._id ? user.password : null;
@@ -100,7 +152,7 @@ router.post("/login", async (req, res) => {
 
   res.json({
     status: "success",
-    message: "Login Succesfully!",
+    message: "Login Successfully!",
     accessJWT,
     refreshJWT,
   });

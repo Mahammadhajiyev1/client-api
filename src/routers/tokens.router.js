@@ -16,16 +16,19 @@ router.get("/", async (req, res, next) => {
       );
       const today = new Date();
       if (dataBaseRefreshToken !== authorization && tokenExp < today) {
-        return res.status(403).json({ message: "Forbiden" });
+        return res.status(403).json({ message: "Forbidden" });
       }
-      const accessJWT = await createAccessJWT(decoded.email, userProfile._id);
+      const accessJWT = await createAccessJWT(
+        decoded.email,
+        userProfile._id.toString()
+      );
 
       // Delete old token from redis database
 
       return res.json({ status: "success", accessJWT });
     }
   }
-  res.status(403).json({ message: "Forbiden" });
+  res.status(403).json({ message: "Forbidden" });
 });
 
 module.exports = router;

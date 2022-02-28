@@ -47,7 +47,7 @@ router.post(
 
       if (result._id) {
         return res.json({
-          status: "succes",
+          status: "success",
           message: "New ticket has been created",
         });
       }
@@ -72,7 +72,7 @@ router.get("/", userAuthorization, async (req, res) => {
     const result = await getTickets(clientId);
 
     return res.json({
-      status: "succes",
+      status: "success",
       result,
     });
   } catch (error) {
@@ -92,7 +92,7 @@ router.get("/:_id", userAuthorization, async (req, res) => {
     const result = await getTicketById(_id, clientId);
 
     return res.json({
-      status: "succes",
+      status: "success",
       result,
     });
   } catch (error) {
@@ -122,7 +122,7 @@ router.put(
 
       if (result._id) {
         return res.json({
-          status: "succes",
+          status: "success",
           message: "Your ticket has been updated",
         });
       }
@@ -150,7 +150,7 @@ router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
 
     if (result._id) {
       return res.json({
-        status: "succes",
+        status: "success",
         message: "Ticket has been closed",
       });
     }
@@ -177,7 +177,7 @@ router.delete("/:_id", userAuthorization, async (req, res) => {
 
     if (result._id) {
       return res.json({
-        status: "succes",
+        status: "success",
         message: "Ticket has been deleted",
       });
     }
